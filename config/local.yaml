@@ -1,0 +1,10 @@
+env: "local" # dev, prod
+storage_path: "./storage/"
+grpc:
+  port: 50051
+  timeout: 10h
+  snmp:
+    target: "127.0.0.1"
+    port: 161
+    community: "public"
+    version: "2c"
