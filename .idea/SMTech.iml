@@ -6,5 +6,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ProtoFile" />
+    <orderEntry type="module" module-name="ClientModbus" />
   </component>
 </module>
