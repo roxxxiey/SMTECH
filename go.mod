@@ -11,8 +11,6 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/goller/snmpparse v0.0.0-20190520211642-b536451a80e6 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect

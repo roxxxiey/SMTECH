@@ -29,17 +29,17 @@ type SNMPConfig struct {
 func MustLoad() *Config {
 	path := fetchConfigPath()
 	if path == "" {
-		panic("config file not exist 1")
+		panic("config file not exist")
 	}
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		panic("config file not exist: 2 " + path)
+		panic("config file not exist: " + path)
 	}
 
 	var cfg Config
 
 	if err := cleanenv.ReadConfig(path, &cfg); err != nil {
-		panic("failed to read config: 3 " + err.Error())
+		panic("failed to read config: " + err.Error())
 	}
 
 	return &cfg

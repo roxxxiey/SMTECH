@@ -2,8 +2,6 @@ github.com/BurntSushi/toml v1.2.1 h1:9F2/+DoOYIOksmaJFPw1tGFy1eDnIJXg+UHjuD8lTak
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/goller/snmpparse v0.0.0-20190520211642-b536451a80e6 h1:XkBcL/BNWWRKWksK65bW9nsJYBVsBCqX/JZsBrEKw1A=
-github.com/goller/snmpparse v0.0.0-20190520211642-b536451a80e6/go.mod h1:0QxS7KS5DMGVaxhh8oVU0YmlrGE3oBmavmjCRhWc+Zw=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/gosnmp/gosnmp v1.37.0 h1:/Tf8D3b9wrnNuf/SfbvO+44mPrjVphBhRtcGg22V07Y=
@@ -14,8 +12,6 @@ github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/roxxxiey/proto v0.0.0-20240712074354-7b648b1361e9 h1:tTht0WAfOobAdU6ynMNVvk+1ee9Ao0Fr+A3c8X94SW0=
-github.com/roxxxiey/proto v0.0.0-20240712074354-7b648b1361e9/go.mod h1:kCC8i9Mw9rE4v1O47iv8jWALNyBzJIrVtvjPIxijxbg=
 github.com/roxxxiey/proto v0.0.0-20240718064712-bb3fc628d10e h1:Y3fsMlLjSiOVaaIBpyB/3gbzrNjZjyzR4SDyQYI7q1o=
 github.com/roxxxiey/proto v0.0.0-20240718064712-bb3fc628d10e/go.mod h1:kCC8i9Mw9rE4v1O47iv8jWALNyBzJIrVtvjPIxijxbg=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=

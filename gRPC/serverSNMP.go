@@ -13,6 +13,30 @@ import (
 	"time"
 )
 
+const (
+	Type = "SNMP"
+)
+
+var authentication = map[string]g.SnmpV3AuthProtocol{
+	"NoAuth": 1,
+	"MD5":    2,
+	"SHA":    3,
+	"SHA224": 4,
+	"SHA256": 5,
+	"SHA384": 6,
+	"SHA512": 7,
+}
+
+var encryption = map[string]g.SnmpV3PrivProtocol{
+	"NoPriv":  1,
+	"DES":     2,
+	"AES":     3,
+	"AES192":  4,
+	"AES256":  5,
+	"AES192C": 6,
+	"AES256C": 7,
+}
+
 type serverAPISNMP struct {
 	pb.UnimplementedPollDriverServiceServer
 }
@@ -23,7 +47,9 @@ func Register(gRPC *grpc.Server) {
 
 func (s *serverAPISNMP) PollType(ctx context.Context, request *pb.PollTypeRequest) (*pb.PollTypeResponse, error) {
 	log.Println("calling pollType")
-	return nil, nil
+	return &pb.PollTypeResponse{
+		Type: Type,
+	}, nil
 }
 
 func (s *serverAPISNMP) Poll(ctx context.Context, request *pb.PollRequest) (*pb.PollResponse, error) {
@@ -31,20 +57,24 @@ func (s *serverAPISNMP) Poll(ctx context.Context, request *pb.PollRequest) (*pb.
 
 	// mode(v2c,v3),
 	snmpSettings := request.GetSettings()
-	if len(snmpSettings) < 3 || len(snmpSettings) > 7 {
-		return nil, fmt.Errorf("invalid settings")
+
+	mode := snmpSettings[0].GetValue()
+
+	ip := snmpSettings[1].GetValue()
+	if isValidIPv4(ip) != true {
+		return nil, fmt.Errorf("invalid IP")
 	}
 
-	switch snmpSettings[0].GetValue() {
+	switch mode {
 
 	// v2c - ip, community
 	case "v2c":
 
-		log.Println("Get SNMPv2c version")
-		ip := snmpSettings[1].GetValue()
-		if isValidIPv4(ip) != true {
-			return nil, fmt.Errorf("invalid IP")
+		if len(snmpSettings) != 3 {
+			return nil, fmt.Errorf("invalid settings")
 		}
+
+		log.Println("Get SNMPv2c version")
 		community := snmpSettings[2].GetValue()
 		params := &g.GoSNMP{
 			Target:    ip,
@@ -70,30 +100,12 @@ func (s *serverAPISNMP) Poll(ctx context.Context, request *pb.PollRequest) (*pb.
 	// v3 - ...
 	case "v3":
 
-		ip := snmpSettings[1].GetValue()
-		if isValidIPv4(ip) != true {
-			return nil, fmt.Errorf("invalid IP")
+		if len(snmpSettings) != 7 {
+			return nil, fmt.Errorf("invalid settings")
 		}
+
 		userName := snmpSettings[2].GetValue()
-		authentication := map[string]int{
-			"NoAuth": 1,
-			"MD5":    2,
-			"SHA":    3,
-			"SHA224": 4,
-			"SHA256": 5,
-			"SHA384": 6,
-			"SHA512": 7,
-		}
 		authPassword := snmpSettings[4].GetValue()
-		encryption := map[string]int{
-			"NoPriv":  1,
-			"DES":     2,
-			"AES":     3,
-			"AES192":  4,
-			"AES256":  5,
-			"AES192C": 6,
-			"AES256C": 7,
-		}
 		privatePassword := snmpSettings[6].GetValue()
 
 		log.Println("Get SNMPv3 version")
@@ -106,9 +118,9 @@ func (s *serverAPISNMP) Poll(ctx context.Context, request *pb.PollRequest) (*pb.
 			Timeout:       time.Duration(30) * time.Second,
 			SecurityParameters: &g.UsmSecurityParameters{
 				UserName:                 userName,
-				AuthenticationProtocol:   g.SnmpV3AuthProtocol(authentication[snmpSettings[3].GetValue()]),
+				AuthenticationProtocol:   authentication[snmpSettings[3].GetValue()],
 				AuthenticationPassphrase: authPassword,
-				PrivacyProtocol:          g.SnmpV3PrivProtocol(encryption[snmpSettings[5].GetValue()]),
+				PrivacyProtocol:          encryption[snmpSettings[5].GetValue()],
 				PrivacyPassphrase:        privatePassword,
 			},
 		}
@@ -116,6 +128,7 @@ func (s *serverAPISNMP) Poll(ctx context.Context, request *pb.PollRequest) (*pb.
 		if err != nil {
 			return nil, fmt.Errorf("SNMP connect err: %v", err)
 		}
+
 		defer params.Conn.Close()
 
 		response, err := s.oid(request, params)
@@ -126,7 +139,7 @@ func (s *serverAPISNMP) Poll(ctx context.Context, request *pb.PollRequest) (*pb.
 		return response, nil
 
 	default:
-		log.Println("This is not the SNMPv2c or SNMPv3")
+		return nil, fmt.Errorf("This is not the SNMPv2c or SNMPv3")
 	}
 
 	return nil, nil
