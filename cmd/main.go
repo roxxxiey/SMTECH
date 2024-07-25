@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 )
 
@@ -23,6 +24,8 @@ func main() {
 	ctx, cancel := signal.NotifyContext(ctx, syscall.SIGTERM, syscall.SIGINT)
 	defer cancel()
 
+	var wg sync.WaitGroup
+
 	cfg := config.MustLoad()
 
 	log := setupLogger(cfg.Env)
@@ -31,8 +34,14 @@ func main() {
 
 	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath)
 
+	wg.Add(1)
+
 	go func() {
+
+		defer wg.Done()
+
 		application.GROCSrv.MustRun()
+
 	}()
 
 	<-ctx.Done()
@@ -42,6 +51,8 @@ func main() {
 	application.GROCSrv.Stop()
 
 	log.Info("application Stopped")
+
+	wg.Wait()
 }
 
 func setupLogger(env string) *slog.Logger {
